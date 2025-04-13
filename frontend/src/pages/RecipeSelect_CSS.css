@@ -2,89 +2,114 @@
 
   
   /* -----------Recipe Selection------------------ */
+
+  *{
+    box-sizing: border-box;
+  }
+
+/* Styling for the Container */
+.recipe-container-select {
+  /* background-color: #0e81f3; Light gray background for a clean look */
+  border-radius: 12px; /* Rounded corners */
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
+  padding: 24px; /* Extra padding for spacious feel */
+  /* margin-top: 20vh; Center the container */
+  max-height: 10vh;
+  /* width: 350vh !important; */
+  /* background: linear-gradient(100deg, #f3fff485, #09c6f569, #d26afcc9); */
+  /* border: 1px solid red; */
+  /* margin-top: -20px; */
   
+}
+
+/* Styling for the VStack */
+.recipe-vstack-select {
+  align-items: center; /* Center children horizontally */
+  width: 100%; /* Full width to utilize container space */
+  padding: 16px; /* Inner padding for content */
+  /* background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.9),
+    rgba(240, 248, 255, 0.7)
+  ); */
+  background: linear-gradient(100deg, #f3fff485, #09c6f569, #d26afcc9);
+  /* border: 1px solid #e2e8f0;  */
+  border-radius: 8px; /* Slightly rounded corners */
+  /* border: 1px solid red; */
+  height: auto;
+  overflow-x: auto;
+}
+
+
+
   .container-body {
-    background-color: white;
-    padding: 0;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    /* background-color: white; */
+    /* background: linear-gradient(100deg, #f3fff485, #09c6f569, #d26afcc9); */
+    /* padding: 0; */
+    /* border: 1px solid rgba(0, 0, 0, 0.1); */
+    /* border-radius: 8px; */
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     gap: 2px;
-    box-sizing: border-box; 
+    /* border: 1px solid rgb(0, 255, 149); */
+    /* height: 100%; */
   }
+  
 
-  
-  
-  .filter-button{
-    width: 13vh;
-    font-size: large;
-  }
-    
-  button {
-    background-color: #f3db54;
-    padding: 8px 16px;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    border: 2px solid #ffffff;
-    cursor: pointer;
-    font-family: cursive;
-  }
-  
-  button:hover {
-    background-color: #5eead4;
-    border: 1px solid #ffffff;
-  }
-  
   .body-select {
-    background: linear-gradient(100deg, #f3fff485, #09c6f569, #d26afcc9);
-    /* background-color: #9c9c9c1e; */
+    /* background: linear-gradient(100deg, #f3fff485, #09c6f569, #d26afcc9); */
+    /* background-color: white; */
     font-family: cursive;
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    /* justify-content: space-between; */
     justify-content: flex-start;
     align-items: center;
     width: 100%;
-    height: 100%;
-    /* border-radius: 10px; */
-    padding-bottom: 5vh;
+    
+  }
+
+  .header-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 2vh;
+  }
+  
+  .body-select-title {
+    flex: 1;
+    text-align: left;
+  }
+  
+  .body-select-title Text {
+    font-size: 32px; /* Reduced from 40px for better fit */
   }
   
   .search-container {
+    flex: 1;
     display: flex;
-    justify-content: space-between; /* Distribute elements on opposite sides */
-    align-items: center; /* Vertically align items in the center (optional) */
-    width: 100%;
-    margin-top: 2vh;
-  }
-
-  .search-title {
-    margin-left: 10vh;
-    font-family: cursive;
+    justify-content: flex-end;
+    align-items: center;
+    width: auto; /* Changed from 100% */
   }
   
   .search-bar {
     display: flex;
-    gap: 10px; /* Space between input and button */
+    gap: 10px;
     margin-right: 5vw;
-    
   }
-
+  
   .input-container {
-    position: relative; /* Allow positioning of the button inside the input */
-    width: 30vw;
-    
-}
-
+    position: relative;
+    width: 25vw; /* Reduced from 30vw */
+  }
+  
   .search-bar input {
-    padding: 10px 40px 10px 10px; /* Space for the button inside */
-    font-size: 16px;
-    width: 30vw; /* Set a width or make it flexible */
+    padding: 8px 40px 8px 10px;
+    font-size: 14px;
+    width: 25vw;
     border: 0;
     border-radius: 8px;
     font-family: cursive;
@@ -92,9 +117,9 @@
   
   .search-btn {
     position: absolute;
-    right: -5vh; /* Align the button to the right edge of the input */
-    top: 50%; /* Position the button in the middle vertically */
-    transform: translateY(-50%); /* Vertically center the button */
+    right: -5vh;
+    top: 50%;
+    transform: translateY(-50%);
     background: transparent;
     border: none;
     cursor: pointer;
@@ -102,7 +127,7 @@
   }
   
   .search-btn i {
-    font-size: 18px; /* Size of the search icon */
+    font-size: 18px;
     color: #eb7210;
   }
   
@@ -119,24 +144,7 @@
     font-family: cursive;
   }
 
-  .recipes-list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 equal-width columns */
-    gap: 5vh; /* Space between items */
-    margin-top: 20px;
-    width: 70vw;
-    font-family: cursive;
-  }
-  
-  .specific-recipe {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    width: 100%;
-    max-width: 400px; /* Adjust based on layout */
-    margin: 10px;
-}
+   
 
 /* Heart container: Positioned above the image */
 .heart-container{
@@ -145,8 +153,15 @@
     justify-content: flex-end; /*Pushes button to the right*/
     width: 100%;
     padding-right: 10px;
+    /* border: 1px solid red; */
    
-  
+} 
+
+.heart-container p{
+    color: #ec843f;
+    background-color: white;
+    font-family: cursive;
+    font-style: italic;
 } 
 
 
@@ -184,38 +199,67 @@
 }
 
 /* Recipe content */
-.recipe-content {
+
+.recipes-list {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 2vh !important; /* Reduced from 5vh */
+  margin-top: 3vh !important;
+  width: 60vw !important;
+  font-family: cursive;
+
+  
+}
+
+.specific-recipe {
   display: flex;
-  flex-direction: column; /* Ensures vertical stacking */
-  align-items: center; /* Centers everything inside horizontally */
-  background-color: rgb(255, 255, 255);
-  margin-top: 3px ;
-  padding: 0 0 0px;
-  border-radius: 7px;
+  flex-direction: column;
+  align-items: center;
   position: relative;
   width: 100%;
 }
 
+
+.specific-recipe h3 {
+  margin: 0;
+}
+
+
+.recipe-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(255, 255, 255);
+  padding: 0;
+  border-radius: 7px;
+  position: relative;
+  width: 100%; /* Changed from 90% for tighter fit */
+}
+
 .recipe-image-select {
-  width: 100%; /* Keeps the original aspect ratio */
+  width: 60vw; /* Keeps the original aspect ratio */
   /* border: 1px solid green; */
-  padding-top: 5px;
+  /* padding-top: 5px; */
+  height: 200px;
+  object-fit: cover;
   }
 
   /* Image Wrapper */
 .recipe-image-wrapper {
   position: relative; /* Ensures heart is positioned inside */
   width: 100%;
+  background-color: white;
 }
   
-  .specific-recipe h3 {
-    margin: 0;
-  }
+
 
   .recipe-title{
-    padding: 10px 0; /* Add some space around the title */
+    /* padding: 10px 0 10px 10px; */
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 20px;
     text-align: center; /* Center-align the title */
-    height: 5vh;
+    height: 8vh;
   }
 
   .pagination {
@@ -229,9 +273,11 @@
 .pagination button {
   background-color: #f0f0f0;
   border: 1px solid #ccc;
+  border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
   height: 4vh;
+  width: 5vh;
   display: flex;
   align-items: center; /* Centers text vertically */
   justify-content: center; /* Centers text horizontally */
@@ -256,89 +302,10 @@
 }
  
   
-  /* Responsive Media Queries */
-  @media screen and (max-width: 1024px) {
-    
-    #root {
-      /* max-width: 1280px; */
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden; /* Prevent unwanted horizontal scrolling */
-      display: flex;
-      flex-direction: column;
-    }
+     
+   
   
-    .header, .footer {
-      /* background-color: #ccfbf1; */
-      background: linear-gradient(180deg, #ccfbf100, #4ade80be, #ccfbf100);
-      text-align: center;
-      font-size: 1.25rem;
-      font-weight: bold;
-      border-radius: 8px;
-      width: 100vh;
-      height: auto;
-      padding: 5vh;
-    
-    }
-  
-    .header h1, .footer h1{
-      color: rgb(235, 18, 18);
-      font-size: xx-large !important;
-    }
-  
-  
-    .container {
-      background-color: white;
-      border-radius: 8px;
-      width: 95%;  /* Ensures full width */
-      min-height: 100vh; /* Ensures it takes the full screen height */
-      display: flex;
-      flex-direction: column;
-      align-items: center; 
-      justify-content: center;
-      text-align: center;
-      
-    }
-  
-    .body {
-      background-color: #f3f4f600;
-      font-family: Arial, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-      border-radius: 10px;
-      padding-bottom: 5vh;
-    }
-    
-    .categories{
-      display: flex;
-      flex-wrap: wrap; /* Allows buttons to adjust on smaller screens */
-      justify-content: center; /* Centers buttons horizontally */
-      align-items: center; /* Centers vertically */
-      gap: 10px; /* Adjust space between buttons */
-      width: 50%; /* Ensure it takes full width */
-      max-width: 200px; /* Limit max width */
-      margin: 0 auto; /* Center the container itself */
-      padding: 10px 0;
-    }
-    
-  
-    button {
-      background-color: #f3db54;
-      padding: 8px 16px;
-      border-radius: 10px;
-      font-size: 0.875rem;
-      /* border: 2px solid #ffffff; */
-      cursor: pointer;
-    }
-    
-  }
+
   
  
   

@@ -1,159 +1,195 @@
+import { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './RecipeSelect_CSS.css';
+import 'font-awesome/css/font-awesome.min.css';
+import { Container, VStack, Text, Spinner, Alert, AlertIcon } from '@chakra-ui/react';
+import { RecipeContext } from '../components/RecipeContext';
+import axios from 'axios';
 
-import axios from "axios";
-import { useEffect, useState } from "react";
-import "./RecipeSelect_CSS.css";
-import 'font-awesome/css/font-awesome.min.css'; //npm install font-awesome  npm install react-router-dom
-import { Container, VStack, Text } from '@chakra-ui/react'
+const API_URL = 'http://localhost:5000/api';
 
-const API_URL = "http://localhost:8080/api";
+function RecipeSelect() {
+  const [recipes, setRecipes] = useState([]);
+  const [loadedRecipes, setLoadedRecipes] = useState([]);
+  const [page, setPage] = useState(1);
+  const [searchInput, setSearchInput] = useState('');
+  const [currentQuery, setCurrentQuery] = useState('Healthy Meals');
+  const recipesPerPage = 6;
+  const { savedRecipes, toggleSaveRecipe } = useContext(RecipeContext);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-function RecipeSelect({onSelectRecipe}){
-    const[recipes, setRecipes] = useState([]);
-    const [loadedRecipes, setLoadedRecipes] = useState([]); // Store currently loaded recipes (6 at a time)
-    const [page, setPage] = useState(1); // Track the current page for pagination
-    const recipesPerPage = 6; // Number of recipes to load per page
-    const [savedRecipes, setSavedRecipes] = useState([]);
-    
-    const getRecipes = async() => {
-        try {
-            const response = await axios.get(API_URL + "/all" ,{
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                withCredentials: true,
-            });
-            // console.log("API Response:", response.data);
-            setRecipes(response.data);
-          
-        } catch (error) {
-            console.log("Error fetching recipes", error);
-        }
+  const getRecipes = async (query = '') => {
+    try {
+      setLoading(true);
+      setError(null);
+      const url = query ? `${API_URL}/recipes?query=${encodeURIComponent(query)}` : `${API_URL}/recipes`;
+      const response = await axios.get(url);
+      console.log('Recipes fetched:', response.data);
+      if (!response.data.results || response.data.results.length === 0) {
+        setError('No healthy meals found for this search.');
+      }
+      setRecipes(response.data.results || []);
+      setCurrentQuery(query || 'Healthy Meals');
+    } catch (error) {
+      console.error('Error fetching recipes:', error.message);
+      setError(error.response?.data?.error || 'Failed to load healthy meals. Please try again.');
+    } finally {
+      setLoading(false);
     }
-    useEffect(() => {
-        getRecipes();
-    }, [])
+  };
 
-    const loadMoreRecipes = () => {
-        const start = (page - 1) * recipesPerPage;
-        const end = start + recipesPerPage;
-        setLoadedRecipes(recipes.slice(start, end)); // Slice the recipes for the current page
-    };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      getRecipes();
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
-    useEffect(() => {
-        loadMoreRecipes();
-      }, [recipes, page]);
-    
-    // Handle "Previous" button click
-    const handlePrevPage = () => {
-        if (page > 1) {
-            setPage(page - 1); // Decrease page number to go back to the previous set of recipes
-        }
-    };
+  useEffect(() => {
+    const start = (page - 1) * recipesPerPage;
+    const end = start + recipesPerPage;
+    setLoadedRecipes(recipes.slice(start, end));
+  }, [recipes, page]);
 
-    // Handle "Next" button click
-    const handleNextPage = () => {
-        if ((page * recipesPerPage) < recipes.length) {
-            setPage(page + 1); // Increase page number to go to the next set of recipes
-        }
-    };
+  const handlePrevPage = () => {
+    if (page > 1) setPage(page - 1);
+  };
 
-    // Handle direct page click
-    const handlePageClick = (pageNumber) => {
-        setPage(pageNumber); // Directly set the page to the clicked page number
-    };
+  const handleNextPage = () => {
+    if (page * recipesPerPage < recipes.length) setPage(page + 1);
+  };
 
-    // Toggle saved recipes
-    const toggleSaveRecipe = (recipeId) => {
-        setSavedRecipes((prevSaved) => {
-            const updatedSaved = prevSaved.includes(recipeId)
-                ? prevSaved.filter((id) => id !== recipeId) // Remove if already saved
-                : [...prevSaved, recipeId]; // Add if not saved
-            
-            console.log("Updated saved recipes:", updatedSaved); // ✅ Debugging output
-            return updatedSaved;
-        });
-    };
+  const handlePageClick = (pageNumber) => {
+    setPage(pageNumber);
+  };
 
-    return(
-        <Container maxW="container.sxl" py={12}>
-            <VStack spacing={8} >
-                <Text
-                    fontSize={"30"}
-                    fontWeight={"bold"}
-                    bgGradient={"linear(to-r, cyan.400, blue.500)"}
-                    bgClip={"text"}
-                    textAlign={"center"}>
-                    Recipes Selection 🚀  
-                </Text>
-                
-                <div className="container-body">
-                    <div className="body-select">
-                        <div className="search-container">
-                            <div className="search-title">
-                                <h3>Result of {}</h3>
-                            </div>
-                            
-                            <div className="search-bar">
-                                <div className="input-container">
-                                    <input placeholder="Enter category" />
-                                    <button className="search-btn">
-                                        <i className="fa fa-search"></i> {/* Font Awesome Search Icon */}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+  const handleSearch = () => {
+    if (searchInput.trim()) {
+      getRecipes(searchInput.trim());
+      setSearchInput('');
+    } else {
+      getRecipes();
+    }
+  };
 
-                        <div className="recipes-list">
-                            {loadedRecipes.map((recipe) => (
-                            <div key={recipe.id} className="specific-recipe">
-                            <div className="recipe-content" >
-                                    <div className="heart-container">
-                                        <p > {recipe.readyInMinutes} minutes</p>
-                                        <button
-                                                className={`heart-button ${savedRecipes.includes(recipe.id) ? "favorited" : ""}`}
-                                                onClick={(e) => {
-                                                    e.stopPropagation(); // Prevents navigation when clicking the heart
-                                                    toggleSaveRecipe(recipe.id);
-                                                }}
-                                            >
-                                                {savedRecipes.includes(recipe.id) ? "❤️" : "🤍"}
-                                        </button>
-                                    </div>
-
-                                    <div className="recipe-content" onClick={() => onSelectRecipe(recipe.id)} style={{ cursor: "pointer" }}>
-                                        <div className="recipe-image-wrapper" onClick={() => onSelectRecipe(recipe.id)} 
-                                            style={{ cursor: "pointer" }}>
-                                            <img src={recipe.image} alt={recipe.name} className="recipe-image-select" />
-                                        </div>
-                                        <div className="recipe-title">
-                                            <h3>{recipe.title}</h3>
-                                        </div>
-                                    </div>
-                                </div> 
-                             </div>
-                            ))}
-                        </div>
-
-                        {/* Pagination Controls */}
-                        <div className="pagination">
-                            <button onClick={handlePrevPage} disabled={page === 1}>Back</button>
-                                {/* Page numbers */}
-                                {[1, 2, 3].map((pageNumber) => (
-                                    <button
-                                    key={pageNumber}
-                                    onClick={() => handlePageClick(pageNumber)}
-                                    className={page === pageNumber ? "active-page" : ""}
-                                    disabled={(pageNumber - 1) * recipesPerPage >= recipes.length}
-                                >
-                                {pageNumber}
-                            </button>
-                            ))}
-                            <button onClick={handleNextPage} disabled={page * recipesPerPage >= recipes.length}>Next</button>
-                        </div>
-                    </div>
+  return (
+    <Container maxW="container.xl" py={4} className="recipe-container-select">
+      <VStack spacing={8} className="recipe-vstack-select">
+        {loading && <Spinner size="xl" />}
+        {error && (
+          <Alert status="error">
+            <AlertIcon />
+            {error}
+            <button onClick={() => getRecipes()} style={{ marginLeft: '10px' }}>
+              Retry
+            </button>
+          </Alert>
+        )}
+        {!loading && (
+          <div className="container-body">
+            <div className="body-select">
+              <div className="header-container">
+                <div className="body-select-title">
+                  <Text
+                    fontSize="40"
+                    fontWeight="bold"
+                    bgGradient="linear(to-r, cyan.400, blue.500)"
+                    bgClip="text"
+                    textAlign="center"
+                  >
+                    DIET COLLECTION
+                  </Text>
                 </div>
-            </VStack>
-        </Container>
-    )
+                <div className="search-container">
+                  <div className="search-title">
+                    {/* <h3>SEARCH RESULTS: {currentQuery}</h3> */}
+                  </div>
+                  <div className="search-bar">
+                    <div className="input-container">
+                      <input
+                        placeholder="Search healthy meals (e.g., vegan salad)"
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                      />
+                      <button className="search-btn" onClick={handleSearch}>
+                        <i className="fa fa-search"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div variant="unstyled" className="recipes-list">
+                {loadedRecipes.length === 0 && !error ? (
+                  <Text>No healthy meals found.</Text>
+                ) : (
+                  loadedRecipes.map((recipe) => (
+                    <div key={recipe.id} className="specific-recipe">
+                      <div className="recipe-content">
+                        <div className="heart-container">
+                          <p>
+                            {recipe.nutrition?.nutrients?.[0]?.amount
+                              ? `${Math.ceil(recipe.nutrition.nutrients[0].amount)} kcal`
+                              : 'N/A'}
+                          </p>
+                          <button
+                            className={`heart-button ${savedRecipes.includes(recipe.id) ? 'favorited' : ''}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleSaveRecipe(recipe.id);
+                            }}
+                          >
+                            {savedRecipes.includes(recipe.id) ? '❤️' : '🤍'}
+                          </button>
+                        </div>
+                        <div
+                          className="recipe-content-inner"
+                          onClick={() => navigate(`/recipe-detail/${recipe.id}`)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <div className="recipe-image-wrapper">
+                            <img
+                              src={recipe.image || 'https://via.placeholder.com/150'}
+                              className="recipe-image-select"
+                            />
+                          </div>
+                          <div className="recipe-title">
+                            <h3>{recipe.title || 'Untitled Recipe'}</h3>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+              {loadedRecipes.length > 0 && (
+                <div className="pagination">
+                  <button onClick={handlePrevPage} disabled={page === 1}>
+                    Back
+                  </button>
+                  {[1, 2, 3].map((pageNumber) => (
+                    <button
+                      key={pageNumber}
+                      onClick={() => handlePageClick(pageNumber)}
+                      className={page === pageNumber ? 'active-page' : ''}
+                      disabled={(pageNumber - 1) * recipesPerPage >= recipes.length}
+                    >
+                      {pageNumber}
+                    </button>
+                  ))}
+                  <button onClick={handleNextPage} disabled={page * recipesPerPage >= recipes.length}>
+                    Next
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </VStack>
+    </Container>
+  );
 }
+
 export default RecipeSelect;
