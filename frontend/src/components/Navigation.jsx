@@ -33,7 +33,7 @@ const Navigation = () => {
           <NavLink to="/shopping-list">
             <Button variant="link" color={colorMode === "light" ? "blackAlpha.800" : "white"} mr={4}>Shopping List</Button>
           </NavLink>
-          <NavLink to="/user-info">
+          <NavLink to="/profile">
             <Button variant="link" color={colorMode === "light" ? "blackAlpha.800" : "white"}>User Info</Button>
           </NavLink>
         </Flex>

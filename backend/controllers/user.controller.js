@@ -73,10 +73,36 @@ export const getUserProfile = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      phone: user.phone,
+      address: user.address,
       createdAt: user.createdAt,
     });
   } else {
     console.log('User not found');
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
+// @desc    Update user profile
+// @route   PUT /api/users/profile
+// @access  Private
+export const updateUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id);
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.phone = req.body.phone || user.phone;
+    user.address = req.body.address || user.address;
+    await user.save();
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      address: user.address,
+      createdAt: user.createdAt,
+    });
+  } else {
     res.status(404);
     throw new Error('User not found');
   }
