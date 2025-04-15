@@ -2,13 +2,27 @@ import asyncHandler from 'express-async-handler';
 import { DailyMealPlan, Meal, Recipe, Ingredient } from '../models/mealPlanner.model.js';
 
 // @desc    Generate shopping list for a week
-// @route   GET /api/shopping-list
+// @route   GET /api/shopping-list?weekStart=YYYY-MM-DD
 // @access  Private
 export const getShoppingList = asyncHandler(async (req, res) => {
-  const today = new Date();
-  const startDate = new Date(today.setDate(today.getDate() - today.getDay()));
-  const endDate = new Date(startDate);
-  endDate.setDate(startDate.getDate() + 6);
+  const { weekStart } = req.query; // Get weekStart from query params
+
+  let startDate, endDate;
+  if (weekStart) {
+    startDate = new Date(weekStart);
+    if (isNaN(startDate)) {
+      res.status(400);
+      throw new Error('Invalid weekStart date format. Use YYYY-MM-DD.');
+    }
+    endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 6);
+  } else {
+    // Default to current week if weekStart is not provided
+    const today = new Date();
+    startDate = new Date(today.setDate(today.getDate() - today.getDay()));
+    endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 6);
+  }
 
   const mealPlans = await DailyMealPlan.find({
     user: req.user.id,
@@ -45,6 +59,7 @@ export const getShoppingList = asyncHandler(async (req, res) => {
               unit: ingredient.unit,
               quantity: ingredient.quantity,
               price: ingredient.price,
+              isCustom: false, // Mark as non-custom (from meals)
             });
           }
         }

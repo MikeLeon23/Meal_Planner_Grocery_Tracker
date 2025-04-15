@@ -20,13 +20,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Password is required'],
     minlength: [6, 'Password must be at least 6 characters'],
-    select: false, // Exclude password by default in queries
+    select: false,
   },
-//   role: {
-//     type: String,
-//     enum: ['user', 'admin'],
-//     default: 'user',
-//   },
+  phone: {
+    type: String,
+    trim: true,
+    default: '',
+  },
+  address: {
+    type: String,
+    trim: true,
+    default: '',
+  },
   createdAt: {
     type: Date,
     default: Date.now,

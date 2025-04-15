@@ -44,7 +44,7 @@ export const createDailyMealPlan = asyncHandler(async (req, res) => {
     }
   }
 
-  // Create ingredients
+  // Create ingredients and meals
   const createdMeals = [];
   for (const meal of meals) {
     const createdRecipes = [];
@@ -67,14 +67,39 @@ export const createDailyMealPlan = asyncHandler(async (req, res) => {
     createdMeals.push(createdMeal._id);
   }
 
-  // Create daily meal plan
-  const dailyMealPlan = await DailyMealPlan.create({
-    date,
-    meals: createdMeals,
+  // Check if a DailyMealPlan for this date and user already exists
+  let dailyMealPlan = await DailyMealPlan.findOne({
+    date: date,
     user: req.user.id,
   });
 
-  res.status(201).json(dailyMealPlan);
+  if (dailyMealPlan) {
+    // If it exists, append the new meals to the existing document
+    dailyMealPlan.meals.push(...createdMeals);
+    dailyMealPlan.updatedAt = new Date(); // Update the updatedAt timestamp
+    await dailyMealPlan.save();
+  } else {
+    // If it doesn't exist, create a new DailyMealPlan
+    dailyMealPlan = await DailyMealPlan.create({
+      date,
+      meals: createdMeals,
+      user: req.user.id,
+    });
+  }
+
+  // Populate the meals, recipes, and ingredients for the response
+  const populatedDailyMealPlan = await DailyMealPlan.findById(dailyMealPlan._id)
+    .populate({
+      path: 'meals',
+      populate: {
+        path: 'recipes',
+        populate: {
+          path: 'ingredients',
+        },
+      },
+    });
+
+  res.status(201).json(populatedDailyMealPlan);
 });
 
 // @desc    Get one-week meal plan
@@ -112,8 +137,8 @@ export const getWeeklyMealPlan = asyncHandler(async (req, res) => {
 // @access  Private
 export const searchSpoonacularRecipes = asyncHandler(async (req, res) => {
   console.log('Query:', req.query); // Debugging output
-  const { cuisines, diets, ingredients, dishTypes } = req.query;
-  const recipes = await RecipeService.getAllRecipes(cuisines, diets, ingredients, dishTypes);
+  const { cuisines, diets, ingredients, dishTypes, number = 30 } = req.query; // Default to 30 recipes
+  const recipes = await RecipeService.getAllRecipes(cuisines, diets, ingredients, dishTypes, number);
   res.json(recipes);
 });
 

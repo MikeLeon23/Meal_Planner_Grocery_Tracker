@@ -1,25 +1,80 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import "./ProfilePage.css";
 
 export default function ProfilePage() {
-  const [user, setUser] = useState({
-    name: "John Doe",
-    email: "johndoe@example.com",
-    phone: "123-456-7890",
-    address: "123 Main Street, City, Country"
-  });
-  
+  const [user, setUser] = useState(null); // Initially null to handle loading state
   const [isEditing, setIsEditing] = useState(false);
-  const [updatedUser, setUpdatedUser] = useState(user);
+  const [updatedUser, setUpdatedUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // Fetch user profile data on component mount
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      setLoading(true);
+      setError("");
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No authentication token found. Please log in.");
+        }
+
+        const response = await axios.get("http://localhost:5000/api/user/profile", { // Fixed endpoint URL
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const userData = response.data;
+        setUser(userData);
+        setUpdatedUser(userData); // Initialize updatedUser for editing
+      } catch (err) {
+        setError(err.message || "Failed to fetch user profile.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   const handleEdit = () => {
     setIsEditing(true);
   };
 
-  const handleSave = () => {
-    setUser(updatedUser);
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.put(
+        "http://localhost:5000/api/user/profile", // Fixed endpoint URL
+        {
+          name: updatedUser.name,
+          phone: updatedUser.phone,
+          address: updatedUser.address,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setUser(response.data);
+      setIsEditing(false);
+    } catch (err) {
+      setError("Failed to save profile changes.");
+      console.error(err);
+    }
   };
+
+  if (loading) {
+    return <div className="profile-container"><p>Loading...</p></div>;
+  }
+
+  if (error) {
+    return <div className="profile-container"><p style={{ color: "red" }}>{error}</p></div>;
+  }
 
   return (
     <div className="profile-container">
@@ -34,23 +89,23 @@ export default function ProfilePage() {
               onChange={(e) => setUpdatedUser({ ...updatedUser, name: e.target.value })}
             />
           ) : (
-            <p>{user.name}</p>
+            <p className="white-bg">{user.name}</p>
           )}
         </div>
         <div className="profile-info">
           <label>Email:</label>
-          <p>{user.email}</p>
+          <p className="white-bg">{user.email}</p>
         </div>
         <div className="profile-info">
           <label>Phone:</label>
           {isEditing ? (
             <input
               type="text"
-              value={updatedUser.phone}
+              value={updatedUser.phone || ''} // Handle null/undefined
               onChange={(e) => setUpdatedUser({ ...updatedUser, phone: e.target.value })}
             />
           ) : (
-            <p>{user.phone}</p>
+            <p className="white-bg">{user.phone || 'Not provided'}</p>
           )}
         </div>
         <div className="profile-info">
@@ -58,18 +113,22 @@ export default function ProfilePage() {
           {isEditing ? (
             <input
               type="text"
-              value={updatedUser.address}
+              value={updatedUser.address || ''} // Handle null/undefined
               onChange={(e) => setUpdatedUser({ ...updatedUser, address: e.target.value })}
             />
           ) : (
-            <p>{user.address}</p>
+            <p className="white-bg">{user.address || 'Not provided'}</p>
           )}
         </div>
         <div className="profile-buttons">
           {isEditing ? (
-            <button className="save-button" onClick={handleSave}>Save</button>
+            <button className="save-button" onClick={handleSave}>
+              Save
+            </button>
           ) : (
-            <button className="edit-button" onClick={handleEdit}>Edit</button>
+            <button className="edit-button" onClick={handleEdit}>
+              Edit
+            </button>
           )}
         </div>
       </div>
