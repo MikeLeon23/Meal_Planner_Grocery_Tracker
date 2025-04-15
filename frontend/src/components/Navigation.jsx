@@ -2,10 +2,14 @@ import { Flex, Text, Link, Button, Container, HStack, useColorMode } from '@chak
 import { IoMoon } from 'react-icons/io5'
 import { LuSun } from 'react-icons/lu'
 import { PlusSquareIcon } from '@chakra-ui/icons'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { AuthContext } from "../context/AuthContext";
+import { useContext } from "react";
 
 const Navigation = () => {
   const { colorMode, toggleColorMode } = useColorMode();
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
   return (
     <Container maxW={"1440px"} px={4}>
       <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
@@ -33,7 +37,7 @@ const Navigation = () => {
             <Button variant="link" color={colorMode === "light" ? "blackAlpha.800" : "white"}>User Info</Button>
           </NavLink>
         </Flex>
-        <HStack spacing={2} alignItems={"center"}>
+        {/* <HStack spacing={2} alignItems={"center"}>
           <Link to={"/create"}>
             <Button>
               <PlusSquareIcon fontSize={20} />
@@ -42,7 +46,28 @@ const Navigation = () => {
           <Button onClick={toggleColorMode}>
             {colorMode === "light" ? <IoMoon /> : <LuSun size={20} />}
           </Button>
-        </HStack>
+        </HStack> */}
+        <Flex gap={4}>
+          {user ? (
+            <>
+              <Link to="/profile">Profile ({user.name})</Link>
+              <Button
+                size="sm"
+                onClick={() => {
+                  logout();
+                  navigate("/login");
+                }}
+              >
+                Logout
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link to="/login">Login</Link>
+              <Link to="/register">Register</Link>
+            </>
+          )}
+        </Flex>
       </Flex>
     </Container>
   )
