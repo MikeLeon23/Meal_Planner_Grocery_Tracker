@@ -5,7 +5,7 @@ import "./RecipeSelect_CSS.css";
 import 'font-awesome/css/font-awesome.min.css'; //npm install font-awesome  npm install react-router-dom
 import { Container, VStack, Text } from '@chakra-ui/react'
 
-const API_URL = "http://localhost:8080/api";
+const API_URL = "http://localhost:5000/api";
 
 function RecipeSelect({onSelectRecipe}){
     const[recipes, setRecipes] = useState([]);
@@ -16,7 +16,7 @@ function RecipeSelect({onSelectRecipe}){
     
     const getRecipes = async() => {
         try {
-            const response = await axios.get(API_URL + "/all" ,{
+            const response = await axios.get(API_URL + "/spoonacular/recipes" ,{
                 headers: {
                     "Content-Type": "application/json",
                 },
