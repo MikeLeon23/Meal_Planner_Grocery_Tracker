@@ -34,12 +34,12 @@ export default function ProfilePage() {
               onChange={(e) => setUpdatedUser({ ...updatedUser, name: e.target.value })}
             />
           ) : (
-            <p>{user.name}</p>
+            <p class="white-bg">{user.name}</p>
           )}
         </div>
         <div className="profile-info">
           <label>Email:</label>
-          <p>{user.email}</p>
+          <p class="white-bg">{user.email}</p>
         </div>
         <div className="profile-info">
           <label>Phone:</label>
@@ -50,7 +50,7 @@ export default function ProfilePage() {
               onChange={(e) => setUpdatedUser({ ...updatedUser, phone: e.target.value })}
             />
           ) : (
-            <p>{user.phone}</p>
+            <p class="white-bg">{user.phone}</p>
           )}
         </div>
         <div className="profile-info">
@@ -62,7 +62,7 @@ export default function ProfilePage() {
               onChange={(e) => setUpdatedUser({ ...updatedUser, address: e.target.value })}
             />
           ) : (
-            <p>{user.address}</p>
+            <p class="white-bg">{user.address}</p>
           )}
         </div>
         <div className="profile-buttons">

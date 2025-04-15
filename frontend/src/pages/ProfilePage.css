@@ -40,7 +40,7 @@ body {
     margin-bottom: 5px;
   }
   
-  p {
+  .white-bg {
     margin: 0;
     padding: 8px;
     background: #f4f4f4;
