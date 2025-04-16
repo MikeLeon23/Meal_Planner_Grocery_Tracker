@@ -142,49 +142,40 @@ const ShoppingList = () => {
 
   return (
     // Main Container
-    <Container maxW="container.sm" py={12}>
+    <Container maxW="container.xl">
       <VStack spacing={8} position="relative">
-        {/* Title */}
-        <Text
-          fontSize={"30"}
-          fontWeight={"bold"}
-          bgGradient={"linear(to-r, cyan.400, blue.500)"}
-          bgClip={"text"}
-          textAlign={"center"}
-        >
-          Shopping List
-        </Text>
+        <HStack spacing={4} w="100%" justify="space-between" align="center">
+          {/* Week Navigation */}
+          <WeekNavigation w="30%" onWeekChange={handleWeekChange} currentWeekStart={currentWeekStart} />
 
-        {/* Week Navigation */}
-        <WeekNavigation onWeekChange={handleWeekChange} currentWeekStart={currentWeekStart} />
-
-        {/* Add Item Form */}
-        <HStack spacing={4} w="100%">
-          <Input
-            placeholder="Product"
-            value={newItemName}
-            onChange={(e) => setNewItemName(e.target.value)}
-          />
-          <Input
-            type="number"
-            placeholder="Quantity"
-            value={newItemQuantity}
-            onChange={(e) => setNewItemQuantity(e.target.value)}
-          />
-          <Select value={newItemUnit} onChange={(e) => setNewItemUnit(e.target.value)}>
-            {units.map((unit) => (
-              <option key={unit} value={unit}>{unit}</option>
-            ))}
-          </Select>
-          <Button
-            onClick={addItem}
-            bgGradient="linear(to-r, cyan.400, blue.500)"
-            color="white"
-            _hover={{ bgGradient: "linear(to-r, cyan.500, blue.600)" }}
-            flexShrink={0}
-          >
-            Add Item
-          </Button>
+          {/* Add Item Form */}
+          <HStack spacing={4} w="70%">
+            <Input
+              placeholder="Product"
+              value={newItemName}
+              onChange={(e) => setNewItemName(e.target.value)}
+            />
+            <Input
+              type="number"
+              placeholder="Quantity"
+              value={newItemQuantity}
+              onChange={(e) => setNewItemQuantity(e.target.value)}
+            />
+            <Select value={newItemUnit} onChange={(e) => setNewItemUnit(e.target.value)}>
+              {units.map((unit) => (
+                <option key={unit} value={unit}>{unit}</option>
+              ))}
+            </Select>
+            <Button
+              onClick={addItem}
+              bgGradient="linear(to-r, cyan.400, blue.500)"
+              color="white"
+              _hover={{ bgGradient: "linear(to-r, cyan.500, blue.600)" }}
+              flexShrink={0}
+            >
+              Add Item
+            </Button>
+          </HStack>
         </HStack>
 
         {/* Shopping List Table */}
@@ -195,7 +186,7 @@ const ShoppingList = () => {
         ) : (
           <TableContainer
             w="100%"
-            maxH="500px"
+            mb={10}
             overflowY="auto"
             borderRadius="md"
             boxShadow="md"

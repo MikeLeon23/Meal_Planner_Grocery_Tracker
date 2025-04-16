@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Flex, Container, Spinner, Text } from "@chakra-ui/react";
+import { Box, Flex, Container, Spinner, Text, Divider} from "@chakra-ui/react";
 import WeekNavigation from "../components/WeekNavigation";
 import DayColumn from "../components/DayColumn";
 import axios from "axios";
@@ -56,6 +56,7 @@ function MealPlannerPage() {
     <Container maxW={"1440px"} p={4}>
       <Box boxShadow="md" borderRadius="md" overflow="hidden" bg="gray.300">
         <WeekNavigation onWeekChange={handleWeekChange} currentWeekStart={currentWeekStart} /> {/* Pass currentWeekStart */}
+        <Divider size={"10px"} />
         {loading ? (
           <Box p={4} textAlign="center">
             <Spinner />

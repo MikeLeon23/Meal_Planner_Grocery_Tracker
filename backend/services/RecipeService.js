@@ -11,7 +11,7 @@ class RecipeService {
   }
 
   // Search recipes by cuisine, diet, ingredients, and dish types
-  async getAllRecipes(cuisines = '', diets = '', ingredients = '', dishTypes = '', number = 30) {
+  async getAllRecipes(cuisines = '', diets = '', ingredients = '', dishTypes = '', number = 100) {
     try {
       const url = `${this.baseUrl}/complexSearch?apiKey=${this.apiKey}&cuisine=${encodeURIComponent(cuisines)}&diet=${encodeURIComponent(diets)}&includeIngredients=${encodeURIComponent(ingredients)}&type=${encodeURIComponent(dishTypes)}&number=${number}`;
       const response = await axios.get(url);
