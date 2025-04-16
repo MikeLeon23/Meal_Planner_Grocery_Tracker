@@ -23,8 +23,6 @@ function WeekNavigation({ onWeekChange, currentWeekStart }) {
     <Flex
       alignItems="center"
       p={4}
-      borderBottom="2px"
-      borderColor="gray.200"
     >
       <IconButton
         aria-label="Previous week"

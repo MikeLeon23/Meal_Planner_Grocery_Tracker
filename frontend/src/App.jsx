@@ -9,6 +9,7 @@ import { useColorModeValue } from '@chakra-ui/react'
 import ShoppingList from './pages/ShoppingList'
 import RecipeSelect from './pages/RecipeSelect'
 import RecipeDetail from './pages/RecipeDetail'
+import './App.css'
 
 function App() {
 
@@ -22,7 +23,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage />}></Route>
         <Route path="/shopping-list" element={<ShoppingList />}></Route>
         <Route path="/recipe-select" element={<RecipeSelect />}></Route>
-        <Route path="/recipe-detail" element={<RecipeDetail />}></Route>
+        <Route path="/recipe-detail/:id" element={<RecipeDetail />}></Route>
       </Routes>
     </Box>
   )

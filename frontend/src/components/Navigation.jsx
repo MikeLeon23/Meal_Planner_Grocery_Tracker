@@ -50,7 +50,7 @@ const Navigation = () => {
         <Flex gap={4}>
           {user ? (
             <>
-              <Link to="/profile">Profile ({user.name})</Link>
+              {/* <NavLink to="/profile">Profile ({user.name})</NavLink> */}
               <Button
                 size="sm"
                 onClick={() => {
