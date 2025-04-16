@@ -4,16 +4,16 @@ class RecipeService {
   constructor() {
     this.baseUrl = 'https://api.spoonacular.com/recipes';
     // this.apiKey = process.env.SPOONACULAR_API_KEY;
-    this.apiKey = "cbf76b81b3974c41811d576d88997680"; // For testing purposes, replace with your actual API key
+    this.apiKey = "7deafd6e74474bb19586ff2c14434c8c"; // For testing purposes, replace with your actual API key
     if (!this.apiKey) {
       throw new Error('SPOONACULAR_API_KEY is not defined in .env');
     }
   }
 
   // Search recipes by cuisine, diet, ingredients, and dish types
-  async getAllRecipes(cuisines = '', diets = '', ingredients = '', dishTypes = '', number = 100) {
+  async getAllRecipes(query = '', diets = '', ingredients = '', dishTypes = '', number = 10) {
     try {
-      const url = `${this.baseUrl}/complexSearch?apiKey=${this.apiKey}&cuisine=${encodeURIComponent(cuisines)}&diet=${encodeURIComponent(diets)}&includeIngredients=${encodeURIComponent(ingredients)}&type=${encodeURIComponent(dishTypes)}&number=${number}`;
+      const url = `${this.baseUrl}/complexSearch?apiKey=${this.apiKey}&query=${encodeURIComponent(query)}&diet=${encodeURIComponent(diets)}&includeIngredients=${encodeURIComponent(ingredients)}&type=${encodeURIComponent(dishTypes)}&number=${number}`;
       const response = await axios.get(url);
       return response.data.results || [];
     } catch (error) {

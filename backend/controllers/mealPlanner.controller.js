@@ -136,9 +136,8 @@ export const getWeeklyMealPlan = asyncHandler(async (req, res) => {
 // @route   GET /api/meal-planner/spoonacular/recipes
 // @access  Private
 export const searchSpoonacularRecipes = asyncHandler(async (req, res) => {
-  console.log('Query:', req.query); // Debugging output
-  const { cuisines, diets, ingredients, dishTypes, number = 30 } = req.query; // Default to 30 recipes
-  const recipes = await RecipeService.getAllRecipes(cuisines, diets, ingredients, dishTypes, number);
+  const { query, diets, ingredients, dishTypes, number = 10 } = req.query; // Default to 30 recipes
+  const recipes = await RecipeService.getAllRecipes(query, diets, ingredients, dishTypes, number);
   res.json(recipes);
 });
 
