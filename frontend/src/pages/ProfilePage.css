@@ -1,0 +1,67 @@
+/* ProfilePage.css */
+  
+  .profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 50px;
+  }
+  
+  .profile-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    text-align: center;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+  }
+  
+  .profile-info {
+    text-align: left;
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .white-bg {
+    margin: 0;
+    padding: 8px;
+    background: #f4f4f4;
+    border-radius: 4px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .profile-buttons {
+    margin-top: 15px;
+  }
+  
+  .edit-button, .save-button, .logout-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .edit-button:hover, .save-button:hover, .logout-button:hover {
+    background-color: #0056b3;
+  }
+  

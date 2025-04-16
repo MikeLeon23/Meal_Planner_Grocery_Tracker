@@ -1,0 +1,17 @@
+.toggle-text {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .toggle-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .toggle-button:hover {
+    text-decoration: underline;
+  }
+  
