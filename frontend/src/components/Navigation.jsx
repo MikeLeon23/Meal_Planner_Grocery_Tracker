@@ -63,8 +63,8 @@ const Navigation = () => {
             </>
           ) : (
             <>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
+              <Link onClick={() => {navigate("/login");}}>Login</Link>
+              <Link onClick={() => {navigate("/register");}}>Register</Link>
             </>
           )}
         </Flex>
