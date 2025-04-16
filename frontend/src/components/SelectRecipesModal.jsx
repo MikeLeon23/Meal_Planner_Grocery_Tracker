@@ -45,7 +45,7 @@ const SelectRecipesModal = ({ isOpen, onClose, onConfirm }) => {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
               params: {
-                number: 30, // Fetch 30 recipes
+                number: 20, // Fetch 30 recipes
               },
             }
           );
